@@ -2,7 +2,6 @@ const express = require('express')
 const cors = require('cors')
 const mongoose = require('mongoose')
 const app = express()
-// const path = require('path')
 const mainRouter = require('./routers/router')
 
 require('dotenv').config()
@@ -20,4 +19,3 @@ app.use(cors({origin: '*'}))
 
 
 app.use(['/'], mainRouter)
-// app.use(express.static(path.join(__dirname, 'public')))
