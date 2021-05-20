@@ -39,6 +39,6 @@ module.exports = {
     delete: async (req, res) => {
         await itemDb.itemsSchema.findOneAndDelete({_id: req.params.id})
         await itemDb.itemsSchema.findOneAndDelete({recipeId: req.params.id})
-        res.send({error: false, message: "Produktas ištrintas!"})
+        res.send({error: false, message: "Įrašas ištrintas!"})
     },
 }

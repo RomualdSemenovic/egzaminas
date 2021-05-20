@@ -7,13 +7,13 @@ module.exports = {
         }
 
         if (req.body.name.length < 3 || req.body.name.length > 50) {
-            return send(true, 'Pavadiniams turi būti 3-50 simbolių ilgio')
+            return send(true, 'Vardas turi būti 3-50 simbolių ilgio')
         }
         if (req.body.quantity.length === 0) {
-            return send(true, 'Įveskite kiekį')
+            return send(true, 'Įveskite amžių')
         }
         if (req.body.price.length === 0) {
-            return send(true, 'Įveskite kainą')
+            return send(true, 'Įveskite slaptažodį')
         }
         if ((!/[^1-9]/.test(req.body.name))) {
             return send(true, 'Blogai įvestas pavadinimas!')
@@ -30,7 +30,7 @@ module.exports = {
     checkQuantity: async (req, res, next) => {
         let item = await itemDb.itemsSchema.find({_id: req.params.id})
         if (item[0].quantity === 0) {
-            return res.send({error: true, message: 'Prekių nėra'})
+            return res.send({error: true, message: 'Įrašų nėra'})
         }
         next()
     }
