@@ -16,10 +16,10 @@ module.exports = {
             return send(true, 'Įveskite slaptažodį')
         }
         if ((!/[^1-9]/.test(req.body.name))) {
-            return send(true, 'Blogai įvestas pavadinimas!')
+            return send(true, 'Blogai įvestas vardas!')
         }
         if ((!/[^a-zA-Z]/.test(req.body.quantity))) {
-            return send(true, 'Kiekį turi sudaryti tik skaičiai!')
+            return send(true, 'Amžių turi sudaryti tik skaičiai!')
         }
         if ((!/[^a-zA-Z]/.test(req.body.price))) {
             return send(true, 'Kainą turi sudaryti tik skaičiai!')
