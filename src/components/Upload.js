@@ -1,52 +1,34 @@
 import {useRef as ref} from 'react';
 import React, {useState} from 'react';
+import http from '../plugins/Fetch'
 
-function Upload(props) {
+function Upload(set) {
     const name = ref()
     const age = ref()
     const mail = ref()
     const password = ref()
 
-    const [getError, setError] = useState('Užpildykite visus laukelius!')
 
-    function upload() {
-    const data = {
-        name: name.current.value,
-        age: age.current.value,
-        mail: mail.current.value,
-        password: password.current.value,
-    }
-    fetch('http://localhost:3001/upload', {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-    }).then(res => res.json())
-        .then(data => {
-            if (data.error) {
-                return setError(data.message)
-            }
-            if (!data.error) {
-                name.current.value = ''
-                age.current.value = ''
-                mail.current.value = ''
-                password.current.value = ''
-                return setError(data.message)
-            }
-
+    const post = () => {
+        const data = {
+            name: name.current.value,
+            age: age.current.value,
+            mail: mail.current.value,
+            password: password.current.value,
+        }
+        http.post('/upload', data).then(res => {
+            set(res.user)
         })
-}
+    }
 
     return (
         <div>
-            <input ref={name} type="text" placeholder='Vardas'/>
+            <input ref={name} type="text"  placeholder='Vardas'/>
             <input ref={age} type="number" placeholder='Amžius'/>
             <input ref={mail} type="text" placeholder='Paštas'/>
             <input ref={password} type="password" placeholder='Slaptažodis'/>
-            <button onClick={upload}>Pridėti įrašą</button>
-            <p>{getError}</p>
+            <button onClick={post}>Pridėti įrašą</button>
+
         </div>
 
     );
