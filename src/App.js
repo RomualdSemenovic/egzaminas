@@ -1,7 +1,9 @@
+
 import './App.css';
-import {useState as state} from 'react';
-import Upload from "./components/Upload";
+
 import Toolbar from "./components/Toolbar";
+import Upload from "./components/Upload";
+import Inventory from "./components/Inventory";
 
 import {
     BrowserRouter as Router,
@@ -10,17 +12,21 @@ import {
 } from "react-router-dom";
 
 function App() {
-    const [user, setUser] =state([])
-  return (
-      <Router>
-          <div className="App">
-
-                      <Upload set={setUser}/>
-
-          </div>
-      </Router>
-  );
+    return (
+        <Router>
+            <div className="App">
+                <Toolbar/>
+                <Switch>
+                    <Route path='/upload'>
+                        <Upload/>
+                    </Route>
+                    <Route path='/storage'>
+                        <Inventory/>
+                    </Route>
+                </Switch>
+            </div>
+        </Router>
+    );
 }
-
 
 export default App;

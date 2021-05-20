@@ -1,36 +1,57 @@
-import {useRef as ref} from 'react';
 import React, {useState} from 'react';
-import http from '../plugins/Fetch'
+import {useRef} from "react";
 
-function Upload(set) {
-    const name = ref()
-    const age = ref()
-    const mail = ref()
-    const password = ref()
+function Upload(props) {
+
+    const nameRef = useRef()
+    const quantityRef = useRef()
+    const priceRef = useRef()
+
+    const [getError, setError] = useState('Užpildykite visus laukelius!')
 
 
-    const post = () => {
+    function upload() {
         const data = {
-            name: name.current.value,
-            age: age.current.value,
-            mail: mail.current.value,
-            password: password.current.value,
+            name: nameRef.current.value,
+            quantity: quantityRef.current.value,
+            price: priceRef.current.value
         }
-        http.post('/upload', data).then(res => {
-            set(res.user)
-        })
+        fetch('http://localhost:3001/upload', {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        }).then(res => res.json())
+            .then(data => {
+                if (data.error) {
+                    return setError(data.message)
+                }
+                if (!data.error) {
+                    nameRef.current.value = ''
+                    quantityRef.current.value = ''
+                    priceRef.current.value = ''
+                    return setError(data.message)
+                }
+
+            })
     }
 
+
+
     return (
-        <div>
-            <input ref={name} type="text"  placeholder='Vardas'/>
-            <input ref={age} type="number" placeholder='Amžius'/>
-            <input ref={mail} type="text" placeholder='Paštas'/>
-            <input ref={password} type="password" placeholder='Slaptažodis'/>
-            <button onClick={post}>Pridėti įrašą</button>
-
+        <div className='d-flex justify-content-center align-items-center'>
+            <div className='w-280 frame d-flex justify-content-center align-items-center flex-column'>
+                <div className='d-flex justify-content-center align-items-center flex-column'>
+                    <input className='input' ref={nameRef} type="text" placeholder='Vardas'/>
+                    <input className='input'  ref={quantityRef} type="text" placeholder='Amžius'/>
+                    <input className='input'  ref={priceRef} type="password" placeholder='Slaptažodis'/>
+                </div>
+                <div onClick={upload} className='button-2'>Įkelti</div>
+                <p className='text-center'>{getError}</p>
+            </div>
         </div>
-
     );
 }
 

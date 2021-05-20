@@ -1,19 +1,44 @@
-const userDb = require('../schemas/schema')
+const itemDb = require('../schemas/schema')
 
-const getAll = async () => {
-    return userDb.find()
-}
+
 
 module.exports = {
     upload: async (req, res) => {
-        const {name, age, email, password} = req.body
-        const user = new userDb()
-        user.name = name
-        user.age = age
-        user.email = email
-        user.password = password
-        await user.save()
-        const users = await getAll()
-        res.send({users})
-    }
+        let newItem = new itemDb.itemsSchema
+        newItem.name = req.body.name
+        newItem.quantity = req.body.quantity
+        newItem.price = req.body.price
+        newItem.save().then(() => {
+            res.send({error: false, message: 'Įrašas įkeltas'})
+        }).catch(e => {
+            res.send({error: true, message: e})
+            console.log(e)
+        })
+    },
+    storage: async (req, res) => {
+        let items = await itemDb.itemsSchema.find()
+        res.send(items)
+    },
+    add: async (req, res) => {
+        let item = await itemDb.itemsSchema.find({_id: req.params.id})
+        console.log(item[0])
+        let quantity = item[0].quantity + 1
+        await itemDb.itemsSchema.findByIdAndUpdate({_id: req.params.id}, {
+            quantity: quantity
+        })
+        res.send({error: false, message: 'Atnaujinta!'})
+    },
+    remove: async (req, res) => {
+        let item = await itemDb.itemsSchema.find({_id: req.params.id})
+        let quantity = item[0].quantity - 1
+        await itemDb.itemsSchema.findByIdAndUpdate({_id: req.params.id}, {
+            quantity: quantity
+        })
+        res.send({error: false, message: 'Atnaujinta!'})
+    },
+    delete: async (req, res) => {
+        await itemDb.itemsSchema.findOneAndDelete({_id: req.params.id})
+        await itemDb.itemsSchema.findOneAndDelete({recipeId: req.params.id})
+        res.send({error: false, message: "Produktas ištrintas!"})
+    },
 }

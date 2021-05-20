@@ -1,6 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 const mongoose = require('mongoose')
+const path = require('path')
 const app = express()
 const mainRouter = require('./routers/router')
 
@@ -13,9 +14,16 @@ mongoose.connect(process.env.MONGO_KEY, { useNewUrlParser: true, useUnifiedTopol
     console.log('error while connecting to db')
 })
 
+
+
+
+
+
+
 app.listen(3001)
 app.use(express.json())
 app.use(cors({origin: '*'}))
 
 
 app.use(['/'], mainRouter)
+app.use(express.static(path.join(__dirname, 'public')))
